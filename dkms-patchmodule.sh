@@ -19,11 +19,6 @@ wget https://mirrors.edge.kernel.org/pub/linux/kernel/v$major.x/linux-$version.$
 echo "Extracting original source"
 tar -xf linux-$version.$subver.tar.* linux-$version.$subver/$1 --xform=s,linux-$version.$subver/$1,.,
 
-# The new module version should be increased to allow the new module to be
-# installed during kernel upgrade
-echo "Increase module version"
-#sed -i 's/\(#define VERSION "0\.8\)/\1\.1/' btusb.c
-
 for i in `ls *.patch`
 do
   echo "Applying $i"
