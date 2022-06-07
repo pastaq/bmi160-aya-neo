@@ -6,6 +6,6 @@ obj-m := bmi160_i2c.o
 all: modules
 
 clean modules modules_install:
-	$(MAKE) -C $(KERNEL_SOURCE_DIR) M=$(PWD) $@
+	$(MAKE) -C $(KERNEL_SOURCE_DIR) M=$(shell PWD) VERSION="$(shell cat ../VERSION)" $@
 
 install: modules_install

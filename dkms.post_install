@@ -1,0 +1,10 @@
+echo "Installing module reloader..."
+install -D -m 0644 -t /etc/modules-load.d bmi160_i2c-mods.conf
+
+echo "Activating Modules..."
+modprobe bmi160_i2c
+modprobe i2c_dev
+
+echo "Reloading udev..."
+udevadm control --reload
+

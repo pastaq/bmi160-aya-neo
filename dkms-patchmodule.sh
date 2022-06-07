@@ -6,15 +6,12 @@ if [ -z "$kernelver" ] ; then
   kernelver=$( echo $DPKG_MAINTSCRIPT_PACKAGE | sed -r 's/linux-(headers|image)-//')
 fi
 
-echo ${kernelver}
 vers=(${kernelver//./ })   # split kernel version into individual elements
 major="${vers[0]}"
 minor="${vers[1]}"
 version="$major.$minor"    # recombine as needed
 subverstr=(${vers[2]//-/ })
-echo ${subverstr} 
 subver="${subverstr[0]}"
-echo ${subver} 
 
 echo "Downloading kernel source $version.$subver for $kernelver"
 wget https://mirrors.edge.kernel.org/pub/linux/kernel/v$major.x/linux-$version.$subver.tar.xz
