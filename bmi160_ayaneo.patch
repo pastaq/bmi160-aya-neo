@@ -1,12 +1,63 @@
+From c01004364519bd5c9d961756083ac4d0731741af Mon Sep 17 00:00:00 2001
+From: "Derek J. Clark" <derekjohn.clark@gmail.com>
+Date: Fri, 5 Jan 2024 19:00:02 -0500
+Subject: [PATCH] Test
+
+---
+ drivers/iio/imu/bmi160/bmi160_core.c | 13 ++++++++++---
+ drivers/iio/imu/bmi160/bmi160_i2c.c  |  4 ++++
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/iio/imu/bmi160/bmi160_core.c b/drivers/iio/imu/bmi160/bmi160_core.c
+index a77f1a8348ff..8d0b1bd57449 100644
+--- a/drivers/iio/imu/bmi160/bmi160_core.c
++++ b/drivers/iio/imu/bmi160/bmi160_core.c
+@@ -27,6 +27,7 @@
+ 
+ #define BMI160_REG_CHIP_ID	0x00
+ #define BMI160_CHIP_ID_VAL	0xD1
++#define BMI260_CHIP_ID_VAL	0x27
+ 
+ #define BMI160_REG_PMU_STATUS	0x03
+ 
+@@ -737,13 +738,19 @@ static int bmi160_chip_init(struct bmi160_data *data, bool use_spi)
+ 		dev_err(dev, "Error reading chip id\n");
+ 		goto disable_regulator;
+ 	}
+-	if (val != BMI160_CHIP_ID_VAL) {
+-		dev_err(dev, "Wrong chip id, got %x expected %x\n",
+-			val, BMI160_CHIP_ID_VAL);
++	if (val != BMI160_CHIP_ID_VAL) || (val != BMI260_CHIP_ID_VAL) {
++		dev_err(dev, "Wrong chip id, got %x expected %x or %x\n",
++			val, BMI160_CHIP_ID_VAL, BMI260_CHIP_ID_VAL);
+ 		ret = -ENODEV;
+ 		goto disable_regulator;
+ 	}
+ 
++	if (val != BMI160_CHIP_ID_VAL) {
++		printk("Found BMI260");
++	} else {
++		printk("Found BMI160");
++	}
++
+ 	ret = bmi160_set_mode(data, BMI160_ACCEL, true);
+ 	if (ret)
+ 		goto disable_regulator;
 diff --git a/drivers/iio/imu/bmi160/bmi160_i2c.c b/drivers/iio/imu/bmi160/bmi160_i2c.c
-index 26398614eddfa..2b3e3e15e2e04 100644
+index 81652c08e644..37ee1105c5e8 100644
 --- a/drivers/iio/imu/bmi160/bmi160_i2c.c
 +++ b/drivers/iio/imu/bmi160/bmi160_i2c.c
-@@ -43,6 +43,7 @@ MODULE_DEVICE_TABLE(i2c, bmi160_i2c_id);
+@@ -44,6 +44,10 @@ MODULE_DEVICE_TABLE(i2c, bmi160_i2c_id);
  
  static const struct acpi_device_id bmi160_acpi_match[] = {
  	{"BMI0160", 0},
-+	{"10EC5280", 0}, /* AYA NEO tablet */
++	{"BOSC0160", 0},
++	{"BMI0260", 0},
++	{"BOSC0260", 0},
++	{"10EC5280", 0},
  	{ },
  };
  MODULE_DEVICE_TABLE(acpi, bmi160_acpi_match);
+-- 
+2.43.0
+
