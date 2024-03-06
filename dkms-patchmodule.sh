@@ -19,7 +19,7 @@ if [ ! -f "${KERNEL_FILE}" ]; then
 fi
 
 echo "Extracting original source"
-tar -xvf linux-$version.$subver.tar.xz linux-$version.$subver/$BMI160_PATH --xform=s,linux-$version.$subver/$BMI160_PATH,.,
+tar -xvf $KERNEL_FILE linux-$version.$subver/$BMI160_PATH --xform=s,linux-$version.$subver/$BMI160_PATH,.,
 
 echo "Applying patch to kernel $KERNEL_VERSION $BMI160_PATH"
 for i in $(ls *.patch); do
